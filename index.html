@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>codePlayer</title>
+	<style type="text/css" href="jquery-ui.min.css"></style>
+	<style type="text/css">
+	body {
+		padding: 0;
+		margin: 0; 
+	}
+	#wrapper {
+		/*margin: 0 auto;*/
+		width: 100%;
+	}
+	#nav {
+		width: 100%;
+		height: 6vh;
+		background-color: rgba(128, 128, 128, 0.72);
+		border-bottom: 3px solid black; 
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+        box-sizing: border-box;
+	}
+	#logo {
+		float: left;
+		padding:10px 0 0 20px;
+		font-weight: bold;
+	}
+	ul {
+		padding: 0;
+		margin: 0;
+	}
+	#menuBtnContainer {
+		width: 250px;
+		margin: 0 auto;
+		position: relative;
+		top: 5px;
+	}
+	#menuBtnContainer li {
+		list-style: none;
+		float: left;	
+		/*display: inline-block;*/
+		border-right: 1px solid black;
+		padding:5px 10px;
+		margin-right: 3px;
+		border-radius:10px;
+		background-color: rgb(239, 239, 239);
+		box-shadow: 10px 10px 5px rgba(105, 96, 96, 0.71);
+	}
+	#menuBtnContainer li:hover, #runBtn:hover {
+		background-color: rgb(179,179,179);
+	}
+	#runBtnContainer {
+		margin-right:20px;
+		float: right;
+	}
+	#runBtn {
+		padding: 7px 10px;
+		font-size:110%;
+		border-radius:10px;
+	}
+	#content {
+		width: 100%;
+		height: 94vh;
+
+	}
+	.codeContents {
+		width: 25%;
+		height: 56px;
+		/*-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+        box-sizing: border-box;*/
+		float: left;
+		height: 100%;
+		position: relative;
+	}
+	.clearfix {
+		clear: both;
+	}
+	.unselected {
+		background-color: rgb(179,179,179) !important;
+	}
+	/*#cssContent, #jsContent {
+		display: none;
+	}*/
+	textarea {
+		font-family: monospace;
+		background-color: rgba(215, 202, 202, 0.21);
+		width: 100%;
+		height: 100%;
+		text-align: left;
+		border: none;
+		padding: 0;
+		border-right: 1px solid rgb(179,179,179);
+
+	}
+	iframe {
+		width: 100%;
+		height: 100%;
+		border: none;
+		background-color: rgba(215, 202, 202, 0.21);
+	}
+	.codeLabel {
+		position: absolute;
+		right: 5px;
+		width: 20%;
+		text-align: right;
+	}
+	</style>
+</head>
+<body>
+
+	<div id="wrapper">
+
+		<div id="nav">
+
+			<div id="logo">
+				codePlayer
+			</div>
+
+			<div id="menuBtnContainer">
+				<ul>
+					<li>HTML</li>
+					<li>CSS</li>
+					<li>JS</li>
+					<li>RESULT</li>
+				</ul>
+			</div>
+
+			<div id="runBtnContainer">
+				<button id="runBtn">Run</button>
+			</div>
+
+		</div>
+
+		<div class="clearfix"></div>
+
+		<div id="content">
+
+			<div class="codeContents" id="htmlContent">
+
+				<div class="codeLabel">HTML</div>
+
+				<textarea class="code" id="htmlCode">
+
+				</textarea>
+
+			</div>
+
+			<div class="codeContents" id="cssContent">
+
+				<div class="codeLabel">CSS</div>
+
+				<textarea class="code" id="cssCode">
+
+				</textarea>
+				
+			</div>
+
+			<div class="codeContents" id="jsContent">
+
+				<div class="codeLabel">JS</div>
+
+				<textarea class="code" id="jsCode">
+
+				</textarea>
+				
+			</div>
+
+			<div class="codeContents" id="resultContent">
+			
+				<div class="codeLabel">OUTPUT</div>
+
+				<iframe src="" id="resultFrame"></iframe>
+
+			</div>
+
+		</div>
+
+	</div>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript">
+
+		$('textarea').draggable();
+		$('.codeContents').resizable();
+
+		$("#menuBtnContainer li").click(function() {
+			$(this).toggleClass('unselected');
+			if ($(this).html() == 'HTML') {
+				$('#htmlContent').toggle();
+			}
+			else if ($(this).html() == 'CSS') {
+				$('#cssContent').toggle();
+			}
+			else if ($(this).html() == 'JS') {
+				$('#jsContent').toggle();
+			}
+			else if ($(this).html() == 'RESULT') {
+				$('#resultContent').toggle(); 
+			}
+
+			var activeContents = $("#menuBtnContainer li").filter(function() {
+				return (!$(this).hasClass('unselected'));
+			}).length;
+
+			var newWidth = 100/activeContents + '%';
+
+			$(".codeContents").css('width', newWidth);
+
+		});
+
+		$('#runBtn').click(function () {
+			$('iframe').contents().find('html').html('<style>' + $('#cssCode').val() + '</style>' + $('#htmlCode').val());
+
+			//EVAL COMMENTED OUT FOR SAFETY ONLINE. UNCOMMENT WHEN RUNNING LOCALLY
+			// var frame = document.getElementById('resultFrame');
+			// frame.contentWindow.eval($('#jsCode').val());
+		});
+	// $('#resultFrame').contents('<p>this is a <h3>header</h3>)
+</script>
+</body>
+</html>
